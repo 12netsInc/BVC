@@ -2,9 +2,9 @@ import NextAuth from "next-auth/next";
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from 'next-auth/providers/google';
 
-export const config: NextAuthOptions = {
+export const nextAuthConfig: NextAuthOptions = {
   session: {
-    strategy: 'jwt'
+    strategy: 'jwt',
   },
   providers: [
     GoogleProvider({
@@ -14,29 +14,11 @@ export const config: NextAuthOptions = {
       allowDangerousEmailAccountLinking: false,
     }) 
   ],
-  callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-    
-      // TODO: Create/Retrieve user, generate token, save token to client here.
-
-      return true
-    },
-    async redirect({ url, baseUrl }) {
-      return baseUrl
-    },
-    async session({ session, user, token }) {
-      console.log("session: ", session)
-      return session
-    },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      console.log("token: ", token)
-      return token
-    }
-  },
+  secret: process.env.JWT_SECRET,
   pages: {
     signIn: '/signin'
   }
 }
 
-const handler = NextAuth(config);
+const handler = NextAuth(nextAuthConfig);
 export { handler as GET, handler as POST };

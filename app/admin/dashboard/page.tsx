@@ -1,12 +1,20 @@
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: 'Dashboard',
-}
+"use client";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const DashboardPage = () => {
+  const {data} = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect('/signin?callbackUrl=/admin/dashboard');
+    }
+  });
+
   return <>
-    <h1>Dashboard</h1>
+    <div style={{height: "100vh", textAlign: "center"}}>
+      <div style={{height: "50%"}}></div>
+      <h1>Dashboard</h1>
+    </div>
   </>
 }
 
